@@ -1,0 +1,114 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+{#自定义title#}
+    {% block title %}
+        <title>自途网-关于我们</title>
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+        <h3></h3>
+        <div class="container" style="height: 800px;overflow: auto">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#1" data-toggle="tab">参团人数</a></li>
+                <li><a href="#2" data-toggle="tab">推荐导游</a></li>
+                <li><a href="#3" data-toggle="tab">满意度</a></li>
+                <li><a href="#4" data-toggle="tab">支付余额</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="1">
+                    <h3></h3>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="jumbotron">
+                                    <img src="{{ project.image.url }}" height="300px" width="400px">
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="jumbotron">
+                                    <h2>{{ project.name }}</h2>
+                                    <h3>当前人数：6<br/>最大人数：12</h3>
+                                    <h4 class="xx"><em>还剩</em><strong id="timer1" style="color: red">一周</strong><em>截止</em></h4>
+                                    <button class="btn btn-warning">支付定金</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="2">
+                    <div class="container">
+                        <div>
+                            <a type="button" href="#3" data-toggle="tab" aria-expanded="true"
+                               class="pull-right">已有导游</a>
+                            <h4>推荐导游</h4>
+                        </div>
+                        {% for led in leader %}
+                            <div class="col-xs-2">
+                                <img src="{{ led.leader.image.url }}" class="pull-left img-thumbnail">
+                                <h3>{{ led.leader.username }}</h3>
+                                <p><br/>积分<span class="badge">{{ led.count }}</span></p>
+                            </div>
+                            <div class="col-xs-10 jumbotron">
+                                <ul>
+                                    <li>导游姓名:<strong>{{ led.leader.username }}</strong></li>
+                                    <li>导游联系方式：<strong>{{ led.leader.mobile }}</strong></li>
+                                    <li>带团次数：<strong>1</strong></li>
+                                    <li>好评率：<strong>100%</strong></li>
+                                    <li>导游留言：<p><strong>{{ led.short }}</strong></p></li>
+                                    <li><button class="btn btn-default">选择该导游</button></li>
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="3">
+                    <h4>系统根据投票选出导游</h4>
+                    {% for fed in leader %}
+                        {% if forloop.counter == 1 %}
+                            <div class="col-xs-2">
+                                <img src="{{ fed.leader.image.url }}" class="pull-left img-thumbnail">
+                                <h3>{{ fed.leader.username }}</h3>
+                                <p><br/>积分<span class="badge">{{ fed.count }}</span></p>
+                            </div>
+                            <div class="col-xs-10 jumbotron">
+                                <ul>
+                                    <li class="xx">导游姓名:<strong>{{ fed.leader.username }}</strong></li>
+                                    <li class="xx">导游联系方式：<strong>{{ fed.leader.mobile }}</strong></li>
+                                    <li class="xx">带团次数：<strong>1</strong></li>
+                                    <li class="xx">好评率：<strong>100%</strong></li>
+                                    <li class="xx">导游留言：<p><strong>{{ fed.short }}</strong></p></li>
+                                </ul>
+                            </div>
+                            <div align="middle">
+                                <form method="post" action="#">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="y">满意
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="n">不满意
+                                        </label>
+                                    </div>
+                                    <input class="btn btn-info" type="submit" value="提交">
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="4">
+                    <h3></h3>
+                    <div class="jumbotron">
+                        <p align="middle">
+                        <h3>满意度已超过最低开团数</h3>
+                        <h3>您是否满意本次开团结果</h3>
+                        <button class="btn btn-success">满意并支付余额</button>
+                        <button class="btn btn-danger">不满意并退团</button><br/>
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+

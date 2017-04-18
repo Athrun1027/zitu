@@ -1,0 +1,1 @@
+default_app_config = "Apps.OPR_APP.apps.OprAppConfig"

@@ -1,0 +1,185 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+{#自定义title#}
+    {% block title %}
+        <title>自途网-您的消息</title>
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+        <div class="line">
+            <span>消息栏</span>
+        </div>
+        <div class="container" style="height: 800px">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#home" data-toggle="tab">通知<span class="badge">{{ message_no }}</span></a>
+                </li>
+                <li>
+                    <a href="#profile" data-toggle="tab">私信</a>
+                </li>
+                <li class="disabled">
+                    <a href="#suggestion" data-toggle="tab">投诉建议</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="home">
+                    <div class="container">
+                        <h3></h3>
+                        <div class=col-xs-8>
+                            <span class="h3 lead">系统自动清理三个月前的已读通知</span>
+                        </div>
+                        <div class=col-xs-2>
+                            <button class="btn btn-default" id="read">全部标记为已读</button>
+                        </div>
+                        <div class=col-xs-8>
+                            {% for mes in message %}
+                                <h3></h3>
+                                <div class="col-xs-2">
+                                    <img src="{{ mes.sender.image.url }}" class="pull-left img-thumbnail">
+                                </div>
+                                <div class="col-xs-10 jumbotron">
+                                    <ul>
+                                        <li>发送人:<strong>{{ mes.sender.username }}</strong></li>
+                                        <li>发送时间：<strong>{{ mes.time_sent }}</strong></li>
+                                        <li>内容：<strong>{{ mes.content }}</strong></li>
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if not message %}
+                        <h3></h3>
+                        <div class="jumbotron">
+                            <h1>暂时无消息</h1>
+                            <h2>暂时无消息，系统自动清理三个月前的已读通知</h2>
+                        </div>
+                    {% endif %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <div class="container">
+                        <h3></h3>
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <ul class="nav nav-pills nav-stacked" role="tablist">
+                                    {% for friend in friends %}
+                                        {% if forloop.counter == 1 %}
+                                            <li role="presentation" class="active">
+                                                <a href="#frided{{ forloop.counter }}"
+                                                   aria-controls="frided{{ forloop.counter }}" role="tab"
+                                                   data-toggle="tab">{{ friend.friend.username }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li role="presentation">
+                                                <a href="#frided{{ forloop.counter }}"
+                                                   aria-controls="frided{{ forloop.counter }}" role="tab"
+                                                   data-toggle="tab">{{ friend.friend.username }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+
+                                </ul>
+                            </div>
+                            <div class="col-xs-10">
+                                <div class="tab-content">
+                                    {% for friend in friends %}
+                                        {% if forloop.counter == 1 %}
+                                            <div role="tabpanel" class="tab-pane fade active in" id="frided{{ forloop.counter }}">
+                                                <form action="#" method=post class="form-inline">
+                                                    <div class="tab-content">
+                                                        <textarea class="form-control" rows="8" style="width: 600px"
+                                                                placeholder="hello I am {{ friend.friend.username }}"></textarea>
+                                                        <h3></h3>
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-default">发送消息</button>
+                                                            </span>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="输入消息">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        {% else %}
+                                            <div role="tabpanel" class="tab-pane" id="frided{{ forloop.counter }}">
+                                                <form action="#" method=post class="form-inline">
+                                                    <div class="tab-content">
+                                                        <textarea class="form-control" rows="8" style="width: 600px"
+                                                                placeholder="hello I am {{ friend.friend.username }}"></textarea>
+                                                        <h3></h3>
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-default">发送消息</button>
+                                                            </span>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="输入消息">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="suggestion">
+                    <div class="container">
+                        <h3></h3>
+                        <div role="tabpanel" class="tab-pane active" id="frided{{ forloop.counter }}">
+                            <form action="#" method=post class="form-inline">
+                                <div class="tab-content">
+                                    <textarea class="form-control" rows="8" style="width: 600px"
+                                            placeholder="hello I am admin"></textarea>
+                                    <h3></h3>
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default">发送消息</button>
+                                        </span>
+                                        <input type="text" class="form-control"
+                                               placeholder="输入消息">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{#自定义js#}
+    {% block custom_js %}
+        <script>
+            function do_job(current_elem, user_id) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url 'inform' %}",
+                    data: {'user_id': user_id},
+                    async: true,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (data) {
+                        if (data.status == 'fail') {
+                            if (data.msg == '用户未登录') {
+                                window.location.href = "{% url 'index' %}";
+                            } else {
+                                alert(data.msg);
+                            }
+                        } else if (data.status == 'success') {
+                            alert(data.msg);
+                            window.location.href = "{% url 'inform' %}";
+                        }
+                    }
+                });
+            }
+            $('#read').on('click', function () {
+                do_job($(this), {{ request.user.id }});
+            });
+        </script>
+    {% endblock %}
+

@@ -1,0 +1,107 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+{#自定义title#}
+    {% block title %}
+        <title>所有景点</title>
+    {% endblock %}
+{#自定义css#}
+    {% block custom_css %}
+        <link rel="stylesheet" href="{% static 'css/projects.css' %}">
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+        {# 分类查询 #}
+        <div class="container">
+            <div class="line">
+                <span>选择您心怡的景区</span>
+            </div>
+            <div class="breadcrumb">
+                <li><h5>范围:</h5></li>
+                <li><a href="?range=&sort={{ sort_id }}" {% if range_id == '' %}class="active2"{% endif %}>全部</a></li>
+                <li><a href="?range=1&sort={{ sort_id }}" {% if range_id == '1' %}class="active2"{% endif %}>国内游</a></li>
+                <li><a href="?range=2&sort={{ sort_id }}" {% if range_id == '2' %}class="active2"{% endif %}>出镜游</a></li>
+                <br>
+                {% if range_id == '1' %}
+                    <li><h5>区域:</h5></li>
+                    <li><a href="?range={{ range_id }}&place=&sort={{ sort_id }}" {% if place_id == '' %}class="active2"{% endif %}>全部</a></li>
+                    <li><a href="?range={{ range_id }}&place=1&sort={{ sort_id }}" {% if place_id == '1' %}class="active2"{% endif %}>疆藏</a></li>
+                    <li><a href="?range={{ range_id }}&place=2&sort={{ sort_id }}" {% if place_id == '2' %}class="active2"{% endif %}>东北</a></li>
+                    <li><a href="?range={{ range_id }}&place=3&sort={{ sort_id }}" {% if place_id == '3' %}class="active2"{% endif %}>西北</a></li>
+                    <li><a href="?range={{ range_id }}&place=4&sort={{ sort_id }}" {% if place_id == '4' %}class="active2"{% endif %}>北方</a></li>
+                    <li><a href="?range={{ range_id }}&place=5&sort={{ sort_id }}" {% if place_id == '5' %}class="active2"{% endif %}>江浙沪</a></li>
+                    <li><a href="?range={{ range_id }}&place=6&sort={{ sort_id }}" {% if place_id == '6' %}class="active2"{% endif %}>南方</a></li>
+                {% endif %}
+                {% if range_id == '2' %}
+                    <li><h5>区域:</h5></li>
+                    <li><a href="?range={{ range_id }}&place=&sort={{ sort_id }}" {% if place_id == '' %}class="active2"{% endif %}>全部</a></li>
+                    <li><a href="?range={{ range_id }}&place=7&sort={{ sort_id }}" {% if place_id == '7' %}class="active2"{% endif %}>欧洲</a></li>
+                    <li><a href="?range={{ range_id }}&place=8&sort={{ sort_id }}" {% if place_id == '8' %}class="active2"{% endif %}>非洲</a></li>
+                    <li><a href="?range={{ range_id }}&place=9&sort={{ sort_id }}" {% if place_id == '9' %}class="active2"{% endif %}>澳洲</a></li>
+                    <li><a href="?range={{ range_id }}&place=10&sort={{ sort_id }}" {% if place_id == '10' %}class="active2"{% endif %}>美洲</a></li>
+                    <li><a href="?range={{ range_id }}&place=11&sort={{ sort_id }}" {% if place_id == '11' %}class="active2"{% endif %}>亚洲</a></li>
+                    <li><a href="?range={{ range_id }}&place=12&sort={{ sort_id }}" {% if place_id == '12' %}class="active2"{% endif %}>异域风情</a></li>
+                {% endif %}
+            </div>
+            <div class="line">
+                <span>自途旅行，您自己的旅行</span>
+            </div>
+            <div class="breadcrumb">
+                <li><h5>排序:</h5></li>
+                <li><a href="?range={{ range_id }}&place={{ place_id }}&sort=-num_admire" {% if sort_id == '-num_admire' %}class="active2"{% endif %}>关注人数由高到低</a></li>
+                <li><a href="?range={{ range_id }}&place={{ place_id }}&sort=-price" {% if sort_id == '-price' %}class="active2"{% endif %}>价格由高到低</a></li>
+                <li><a href="?range={{ range_id }}&place={{ place_id }}&sort=price" {% if sort_id == 'price' %}class="active2"{% endif %}>价格由低到高</a></li>
+            </div>
+        </div>
+        {# 分类查询结果 #}
+        <div class="container" style="height: 530px">
+            <div class="row">
+                {% for pro in project.object_list %}
+                    <div class="col-xs-3 box">
+                        <a href="{% url 'model_pro' pro_id=pro.ID %}"><img src="{{ pro.image.url }}" class="img-thumbnail"></a>
+                        <div class="box_in_left">
+                            <h4>{{ pro.name }}</h4>
+                            <h5>{{ pro.description }}</h5>
+                        </div>
+                        <div class="box_in_right">
+                            <h3><span class="label label-info">¥{{ pro.price }}</span></h3>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if not project_no %}
+                    <div class="jumbotron">
+                        <h1>无筛选结果</h1>
+                        <h2>很抱歉没有筛选结果，我们会尽快完善网站的项目开设</h2>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {# 换页按钮 #}
+        <div class="text-center">
+            {% load i18n %}
+            <div class="pagination">
+                {% if project.has_previous %}
+                    <li class="prev"><a href="?{{ project.previous_page_number.querystring }}">上一页</a></li>
+                {% else %}
+                    <li class="disabled prev"><a>上一页</a></li>
+                {% endif %}
+                {% for page in project.pages %}
+                    {% if page %}
+                        {% if page == project.number %}
+                            <li class="active current page"><a>{{ page }}</a></li>
+                        {% else %}
+                            <li class="page"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a>...</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if project.has_next %}
+                    <li class="next"><a href="?{{ project.next_page_number.querystring }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled next"><a>下一页</a></li>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}

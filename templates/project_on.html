@@ -1,0 +1,281 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+    {% load custom_markdown %}
+{#自定义title#}
+    {% block title %}
+        <title>开团景点详情页</title>
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+    <div class="container">
+        <div class="line">
+            <span>为了最好的你</span>
+        </div>
+        <div class="carousel slide">
+            <div  class="col-xs-6">
+                <img src="{{ project.image.url }}" class="img-rounded img-responsive">
+            </div>
+        </div>
+        <div class="container col-xs-1">
+            <div class="row">
+                <div>
+                    <img src="{{ project.image.url }}" class="img-thumbnail">
+                </div>
+                <div>
+                    <img src="{{ project.image.url }}" class="img-thumbnail">
+                </div>
+                <div>
+                    <img src="{{ project.image.url }}" class="img-thumbnail">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <h1>{{ project.name }}</h1>
+            <h5>状态：{{ project.get_status_display }}</h5>
+            <div>
+                <span class="label label-danger">最热</span>
+                <span class="label label-success">最新</span>
+                {% if request.user.is_authenticated %}
+                    {% if user_pro.like %}
+                        <a class="btn btn-warning btn-xs"><span id="like"
+                                                                class="glyphicon glyphicon-heart">已关注</span></a>
+                    {% else %}
+                        <a class="btn btn-warning btn-xs"><span id="like"
+                                                                class="glyphicon glyphicon-heart">未关注</span></a>
+                    {% endif %}
+                {% else %}
+                    <a class="btn btn-warning btn-xs" href="{% url 'needlogin' %}"><span id="like" class="glyphicon glyphicon-heart">未关注</span></a>
+                {% endif %}
+            </div>
+            <div class="text-muted">
+                <p>商品编号：{{ project.ID }}</p>
+            </div>
+            <div class="bg-warning">
+                <dl>
+                    <dt><small>促销价：</small></dt>
+                    <dd>
+                        <p style="font-size: large">
+                            <dfn style="color: red"><strong><em>¥{{ project.price }}</em></strong></dfn>
+                            起/份
+                            <span class="label label-danger">
+                                {% if project.status == '1' %}
+                                    {{ timelimit1.time_end | timeuntil }}
+                                {% elif project.status == '2' %}
+                                    {{ timelimit2.time_end | timeuntil }}
+                                {% elif project.status == '3' %}
+                                    {{ timelimit3.time_end | timeuntil }}
+                                {% else %}
+                                    {{ timelimit4.time_end | timeuntil }}
+                                {% endif %}
+                            </span>
+                        </p>
+                    </dd>
+                </dl>
+                <dl class="bg-warning">
+                    <dt><small>优惠信息</small></dt>
+                    <dd>
+                        <span class="label label-danger">当季促销</span>
+                        <span class="label label-danger">机票折扣</span>
+                        <span class="label label-danger">拼团优惠</span>
+                    </dd>
+                </dl>
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn-info" id="mybtn" data-toggle="modal" data-target="#myModal5">
+                        立即订购
+                    </a>
+                {% else %}
+                    <a class="btn btn-info" href="{% url 'needlogin' %}">
+                        立即订购
+                    </a>
+                {% endif %}
+                <div class="modal fade" id="myModal5" tabindex="-1" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span>×</span>
+                                </button>
+                                <h4 class="modal-title">开团成功</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>您已成功开团</p>
+                                <div class="well bg-warning">
+                                    <p>
+                                        您已成功开团，请支付定金。您可在个人中心查看开团进度
+                                    </p>
+                                </div>
+                                <div align="middle">
+                                   <a class="btn btn-danger" id="buy">
+                                       支付定金
+                                   </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container carousel slide">
+        <div class="line">
+            <span>了解详细内容</span>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#1" data-toggle="tab" aria-expanded="true">景点详情</a></li>
+            <li class=""><a href="#2" data-toggle="tab" aria-expanded="false">景点评论</a></li>
+            <li class=""><a href="#3" data-toggle="tab" aria-expanded="false">优质导游</a></li>
+            <li class=""><a href="#4" data-toggle="tab" aria-expanded="false">行程规划</a></li>
+        </ul>
+
+		<div class="tab-content">
+			<div class="tab-pane fade active in" id="1">
+                <h3></h3>
+				<div class="jumbotron">
+					<h2>{{ project.name }}</h2>
+                    {{ project.something|custom_markdown }}
+				</div>
+			</div>
+            <div class="tab-pane fade" id="2">
+                <ul class="list-unstyled">
+                    {% for pla in player %}
+                        <li>
+                            <h3></h3>
+                            <div class="container">
+                                <div class="col-xs-2">
+                                    <img src="{{ pla.username.image.url }}" class="pull-left img-thumbnail">
+                                </div>
+                                <div class="col-xs-10 jumbotron">
+                                    <h3><span class="label label-success">游客：{{ pla.username.username }}</span></h3>
+                                    <p>{{ pla.words }}</p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    {% if not leader %}
+                        <h3></h3>
+                        <div class="jumbotron">
+                            <h1>无筛选结果</h1>
+                            <h2>很抱歉没有筛选结果，我们会尽快完善网站的项目开设</h2>
+                        </div>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="3">
+                <h3></h3>
+                <ul class="list-unstyled">
+                    {% for led in leader %}
+                    <li>
+                        <div class="container">
+                            <div class="col-xs-2">
+                                <img src="{{ led.leader.leader.image.url }}" class="pull-left img-thumbnail">
+                            </div>
+
+                            <div class="col-xs-10 jumbotron">
+                                <ul>
+                                    <li class="xx">导游姓名:<strong>{{ led.leader.leader.username }}</strong></li>
+                                    <li class="xx">导游联系方式：<strong>{{ led.leader.leader.mobile }}</strong></li>
+                                    <li class="xx">带团次数：<strong>1</strong></li>
+                                    <li class="xx">积分：<strong>{{ led.leader.leader.integral }}</strong></li>
+                                    <li class="xx">心路历程:<p><strong>{{ led.leader.short }}</strong></p></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    {% if not leader %}
+                        <div class="jumbotron">
+                            <h1>无筛选结果</h1>
+                            <h2>很抱歉没有筛选结果，我们会尽快完善网站的项目开设</h2>
+                        </div>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                           <h2>行程安排</h2>
+                        </div>
+
+                        <div class="col-xs-9">
+                            {% for pla in plan %}
+                                <h2 id="section1">第{{ forloop.counter }}天</h2>
+                                <ul>
+                                    <li>导游姓名:<strong>{{ pla.place }}</strong></li>
+                                    <li>导游姓名:<strong>{{ pla.day_in }}</strong></li>
+                                    <li>导游联系方式：<strong>{{ pla.day_out }}</strong></li>
+                                </ul>
+                            {% endfor %}
+                            {% if not plan %}
+                                <h3></h3>
+                                <div class="jumbotron">
+                                    <h1>无筛选结果</h1>
+                                    <h2>很抱歉没有筛选结果，我们会尽快完善网站的项目开设</h2>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block custom_js %}
+        <script>
+            function do_job(current_elem, user_id, pro_id) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url 'loading_pro' pro_id=project.ID %}",
+                    data: {'user_id': user_id, 'pro_id': pro_id},
+                    async: true,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (data) {
+                        if (data.status == 'fail') {
+                            if (data.msg == '用户未登录') {
+                                window.location.href = "{% url 'index' %}";
+                            } else {
+                                alert(data.msg);
+                            }
+                        } else if (data.status == 'success') {
+                            current_elem.text(data.msg)
+                        }
+                    }
+                });
+            }
+            $('#like').on('click', function () {
+                do_job($(this), {{ request.user.id }}, {{ project.ID }});
+            });
+            function do_buy(current_elem, user_id, pro_id) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url 'buy' %}",
+                    data: {'user_id': user_id, 'pro_id': pro_id},
+                    async: true,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (data) {
+                        if (data.status == 'fail') {
+                            if (data.msg == '用户未登录') {
+                                window.location.href = "{% url 'index' %}";
+                            } else {
+                                alert(data.msg);
+                            }
+                        } else if (data.status == 'success') {
+                            alert(data.msg);
+                            window.location.href = "{% url 'person' %}";
+                        }
+                    }
+                });
+            }
+            $('#buy').on('click', function () {
+                do_buy($(this), {{ request.user.id }}, {{ project.ID }});
+            });
+        </script>
+    {% endblock %}

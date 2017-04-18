@@ -1,0 +1,127 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+{#自定义title#}
+    {% block title %}
+        <title>自途网-用户信息</title>
+    {% endblock %}
+{#自定义css#}
+    {% block custom_css %}
+        <link rel="stylesheet" href="{% static 'highlight/styles/monokai-sublime.css' %}">
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+        <br>
+        <div class="container jumbotron">
+            <div class="col-xs-3">
+                <img src="{{ request.user.image.url }}" class="img-circle img-responsive" width="220" height="220">
+            </div>
+            <div class="col-xs-7 col-xs-offset-2">
+                <ul class="list-unstyled">
+                    <div class="line">
+                        <span style="background-color: #eeeeee">个人账户信息</span>
+                    </div>
+                    <li class="h2">{{ request.user.username|capfirst }}</li>
+                    <li class="h3">{{ request.user.email }}</li>
+                    <li class="h4">参团次数：{{ request.user.count }}</li>
+                    {% if request.user.leader %}
+                        <li class="h4">身份：导游</li>
+                        <li class="h4">积分：{{ request.user.integral }}</li>
+                    {% else %}
+                        <li class="h4">身份：游客</li>
+                    {% endif %}
+                    <button class="btn btn-success">私信</button>
+                    <button class="btn btn-success">加为好友</button>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <!--个人结束-->
+        <div class="container">
+            <div  class="col-xs-1">
+                <ul class="nav">
+                    <li class="active"><a href="#2" data-toggle="tab">订单</a></li>
+                    <li><a href="#5" data-toggle="tab">导游</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-1">
+                <div style="height:500px; width:1px; border-left:1px #f0f0f0 solid"></div>
+            </div>
+            <div class="col-xs-10">
+                <div class="tab-content" style="padding: 10px;">
+                    <div class="tab-pane fade in active" id="2">
+                        <ul class="list-unstyled">
+                            {% for bu in buy %}
+                                <li>
+                                    <div class="col-xs-3">
+                                        <h4>{{ bu.time_in }}<br /></h4>
+                                    </div>
+                                    <div class="container">
+                                        <div class="jumbotron col-xs-8">
+                                            <ul class="list-unstyled">
+                                                <li>
+                                                    <a href="{% url 'model_pro' pro_id=bu.project.ID %}">
+                                                        <p>{{ bu.project.name }}</p>
+                                                        <img width="200" src="{{ bu.project.image.url }}" class="img-thumbnail">
+                                                    </a>
+                                                </li>
+                                                <li><p>您于{{ bu.time_in }}参加{{ bu.project.name }}游团&nbsp;&nbsp;价格：{{ bu.project.price }}元</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </li>
+                            {% endfor %}
+                            {% if not buy %}
+                                <div class="jumbotron">
+                                    <h1>无筛选结果</h1>
+                                    <h2>很抱歉没有筛选结果，我们会尽快完善网站的项目开设</h2>
+                                </div>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="5">
+                        <div>
+                            {% if request.user.leader %}
+                                <h3>我带领的团</h3>
+                            <div class="jumbotron">
+                                <ul class="list-unstyled">
+                                    {% for myl in mylead %}
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-xs-4">
+                                                    <a href="#"><img src="{{ myl.project.image.url }}" class="img-thumbnail"></a>
+                                                </div>
+                                                <div class="col-xs-8">
+                                                    <a href="#"><p><strong>{{ myl.project.name }}</strong></p></a>
+                                                    <p>规格<strong style="color:red">{{ myl.project.num_max }}</strong>人</p>
+                                                    <p>{{ myl.project.description }}</p>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                    {% if not mylead %}
+                                        <div class="jumbotron">
+                                            <h1>无筛选结果</h1>
+                                            <h2>很抱歉没有筛选结果，我们会尽快完善网站的项目开设</h2>
+                                        </div>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            {% else %}
+                                <p>
+                                    您现在不是导游，若想成为导游请单击“我想成为导游”
+                                </p>
+                                <button class="btn btn-warning">我想成为导游</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    {% endblock %}
+

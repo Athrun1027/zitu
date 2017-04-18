@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+{% load staticfiles %}
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>自途网重置密码</title>
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/all_need.css' %}">
+    <link rel="icon" href="{% static 'icon/favorite.ico' %}">
+<body>
+    <div class="line">
+        <span>自途旅行，请重置您的密码</span>
+    </div>
+    <div class="container jumbotron">
+	    <div class="text-center">
+        <h1><span class="glyphicon glyphicon-cd"></span>自途网 重置密码</h1>
+        <form class="form-horizontal" action="{% url 'reset_post' %}" method="post">
+            <div class="form-group form-inline">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                    </div>
+                    <input type="email" class="form-control" name="email"
+                           placeholder="请输入您的邮箱" value="{{ email_reset }}">
+                    {% if reset_form.email.errors %}
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-warning-sign"></span>
+                        </div>
+                    {% else %}
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if reset_form.email.errors %}
+                    <div class="alert alert-danger fade in">
+                        <button class="close" type="button" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                        {{ reset_form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group form-inline">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-eye-close"></span>
+                    </div>
+                    <input type="password" class="form-control" name="password"
+                           placeholder="请输入您的密码">
+                    {% if reset_form.password.errors %}
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-warning-sign"></span>
+                        </div>
+                    {% else %}
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if reset_form.password.errors %}
+                    <div class="alert alert-danger fade in">
+                        <button class="close" type="button" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                        {{ reset_form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group form-inline">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </div>
+                    {{ form.captcha }}
+                    {% if reset_form.captcha.errors %}
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-warning-sign"></span>
+                        </div>
+                    {% else %}
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </div>
+                    {% endif %}
+                </div>
+                    {% if reset_form.captcha.errors %}
+                        <div class="alert alert-danger fade in">
+                            <button class="close" type="button" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {{ reset_form.captcha.errors }}
+                        </div>
+                    {% endif %}
+                    {% if info_reset %}
+                        <div class="alert alert-danger fade in">
+                            <button class="close" type="button" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {% autoescape off %}
+                                {{ info_reset }}
+                            {% endautoescape %}
+                        </div>
+                    {% endif %}
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-default" style="width: 280px">立即重置</button>
+            <h1></h1>
+        {% csrf_token %}
+        </form>
+    </div>
+    </div>
+    <div class="line">
+        <span>该页面仅一次有效！</span>
+    </div>
+<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/all_need.js' %}"></script>
+</body>
+</html>

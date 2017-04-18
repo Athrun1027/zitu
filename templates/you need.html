@@ -1,0 +1,21 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+{#自定义title#}
+    {% block title %}
+        <title>...</title>
+    {% endblock %}
+{#自定义css#}
+    {% block custom_css %}
+        <link rel="stylesheet" href="{% static 'css/xxx.css' %}">
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+        ...
+    {% endblock %}
+{#自定义js#}
+    {% block custom_js %}
+        <script src="{% static 'js/xxx.js' %}"></script>
+    {% endblock %}
+

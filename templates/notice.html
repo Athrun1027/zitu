@@ -1,0 +1,47 @@
+{#继承来自#}
+    {% extends 'base.html' %}
+{#载入静态路径#}
+    {% load staticfiles %}
+{#自定义title#}
+    {% block title %}
+        <title>自途网-公告栏</title>
+    {% endblock %}
+{#自定义content#}
+    {% block content %}
+        <div class="container">
+            <div class="col-xs-12" align="left">
+                <div class="line">
+                    <span>自途旅行，公告栏</span>
+                </div>
+                <table class="table table-striped table-bordered table-hover table-responsive">
+                    <tr>
+                        <td>发布时间</td>
+                        <td>公告标题</td>
+                        <td>公告内容</td>
+                    </tr>
+                    {% for car in carousel %}
+                        <tr>
+                            <td><a href="?index={{ car.index }}">{{ car.time_in }}</a></td>
+                            <td><a href="?index={{ car.index }}">{{ car.title }}</a></td>
+                            <td><a href="?index={{ car.index }}">{{ car.content|slice:"6" }}...</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="container">
+            <div class="line">
+                <span>公告详情</span>
+            </div>
+            <div class="jumbotron">
+                <h1>{{ carousel_on.title }}</h1>
+                <p class="xx"><strong>管理员</strong> {{ carousel_on.time_in }}</p>
+                <hr style="height:1px;border:none;border-top:1px dashed #0066CC;">
+                <p>尊敬的用户们：<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ carousel_on.content }}
+                </p>
+            </div>
+        </div>
+
+        <!--公告结束-->
+    {% endblock %}

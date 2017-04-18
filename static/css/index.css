@@ -1,0 +1,29 @@
+/*轮播图*/
+    #myCarousel{
+        padding: 0;
+        margin: 0;
+        border: 0;
+        width: auto;
+        height: auto;
+    }
+/*左右盒子效果*/
+    .box_item_left{
+        position: absolute;
+        left: 100%;
+        width: 70%;
+        height: 70%;
+    }
+    .box_item_right{
+        position: absolute;
+        right: 100%;
+        bottom: 0;
+        width: 70%;
+        height: 70%;
+        text-align: right;
+    }
+    .stu {
+        height: 165px;
+    }
+    .stg {
+        height: 227px;
+    }

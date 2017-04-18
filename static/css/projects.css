@@ -1,0 +1,15 @@
+/*选项卡选中*/
+    .active2{
+        background-color: #0e2231;
+        color: #ffffff;
+        padding: 5px;
+        border-radius: 2px
+    }
+/*项目内字幕说明*/
+    .box_in_left{
+        padding-left: 10px;
+    }
+    .box_in_right{
+        text-align: right;
+        padding-right: 10px;
+    }
