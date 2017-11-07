@@ -5,7 +5,7 @@
 from random import Random
 from ..models import Mailbox
 from django.core.mail import send_mail
-from mydjango2.settings import EMAIL_FROM
+from zitu.settings import EMAIL_FROM
 
 
 def random_code(random_length=8):
